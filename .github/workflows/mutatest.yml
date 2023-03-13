@@ -28,6 +28,7 @@ jobs:
       - name: Run Mutatest
         run: |
           mutatest --src isPrime.py --testcmds "python -m unittest discover"
+          coverage combine
           coverage report
           coverage html
           COVERAGE=$(coverage report | awk 'END{print $NF}' | sed 's/[^0-9]*//g')
