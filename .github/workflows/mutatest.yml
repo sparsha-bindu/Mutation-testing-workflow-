@@ -27,7 +27,7 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=3 --max-line-length=80 --ignore=E111,E121,E126 --statistics
       - name: Run Mutatest
         run: |
-          coverage run -m mutatest --src isPrime.py --testcmds "python -m unittest discover"
+          coverage run -m mutatest --src ./isPrime.py --testcmds "python -m unittest discover"
           coverage report
           coverage html
           COVERAGE=$(coverage report | awk 'END{print $NF}' | sed 's/[^0-9]*//g')
