@@ -1,16 +1,7 @@
-def isPrime(num):
-  
-    if num > 1:
-        
-       # check for factors
-       for i in range(2,num):
-           if (num % i) == 0:
-               return False
-  
-       else:
-           return True
-             
-    # if input number is less than
-    # or equal to 1, it is not prime
-    else:
-       return False;
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n ** 0.5) + 1):
+        if n % i == 0:
+            return False
+    return True

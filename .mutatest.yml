@@ -1,0 +1,12 @@
+sources:
+  - isPrime.py
+
+tests:
+  - tests/test_isPrime.py
+
+options:
+  - --no-capture
+  - --mutate=MATH,COND
+
+report:
+  - html
