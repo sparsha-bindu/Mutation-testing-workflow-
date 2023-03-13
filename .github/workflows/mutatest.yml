@@ -1,29 +1,44 @@
-name: Mutation Testing
+name: Mutatest
 
 on: [push, pull_request]
 
 jobs:
-  mutatest:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-
-    - name: Install dependencies
-      run: |
-        pip install mutatest
-
-    - name: Run Mutation Tests
-      run: |
-        coverage run -m mutatest
-
-    - name: Upload Coverage Report
-      uses: actions/upload-artifact@v2
-      with:
-        name: coverage
-        path: ./htmlcov
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+          pip install coverage
+          pip install mutatest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings.
+          flake8 . --count --exit-zero --max-complexity=3 --max-line-length=80 --ignore=E111,E121,E126 --statistics
+      - name: Run Mutatest
+        run: |
+          coverage run -m mutatest --src isPrime.py --testcmds "python -m unittest discover"
+          coverage report
+          coverage html
+          COVERAGE=$(coverage report | awk 'END{print $NF}' | sed 's/[^0-9]*//g')
+          if [ "$COVERAGE" -lt 100 ]; then
+              echo "Coverage is less than 100%. Failing the build..."
+              exit 1
+          else
+              echo "Coverage is greater than or equal to 100%."
+          fi
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: ./htmlcov
