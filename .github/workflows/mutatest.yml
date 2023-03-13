@@ -28,8 +28,4 @@ jobs:
       - name: Run Mutatest
         run: |
           mutatest --src . --testcmds "python -m unittest discover"
-          coverage combine
-          coverage report
-          coverage html
-        
-  
+            
