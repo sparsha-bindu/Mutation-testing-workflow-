@@ -27,7 +27,7 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=3 --max-line-length=80 --ignore=E111,E121,E126 --statistics
       - name: Run Mutatest
         run: |
-          mutatest --src isPrime.py --testcmds "python -m unittest discover"
+          mutatest --src . --testcmds "python -m unittest discover"
           coverage combine
           coverage report
           coverage html
